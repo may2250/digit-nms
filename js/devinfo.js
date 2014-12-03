@@ -83,144 +83,12 @@ var dataSet = [
 	['3','2','MPEG2 Audio','456','456']	
 ];
 
-function tbl_output() {
-	$(".tab2Content").empty();
-	$(".tab2Content").append(
-		+'<div class="clearfix">'
-			+'<div id="out_tree" class="tbl_struct"></div>'
-			+'<table cellpadding="0" cellspacing="0" border="0" class="cell-border compact hover" id="tbl_outtable"></table>'
-		+'</div>'
-		+'<div id="dialog-NIT" title="NIT段编辑">'			
-			+'<div class="nit_edit">'
-				+'<label>网络ID</label>'
-				+'<input type="text" class="nit_id" value=""></input>&nbsp(十六进制)'
-				+'<label>网络名称</label>'
-				+'<input type="text" class="nit_name" value="段1"></input>'
-				+'<textarea rows="5">'
-				+'</textarea>'
-			+'</div>'
-		+'</div>'
-		+'<!-- Definition of context menu -->'
-		+'<ul id="table_menu" class="contextMenu ui-helper-hidden">'
-			+'<li class="menu_expandall"><a href="#expandall"><span class="ui-icon ui-icon-folder-open"></span>展开所有子节点</a></li>'
-			+'<li class="menu_collasp"><a href="#collasp"><span class="ui-icon ui-icon-folder-collapsed"></span>收起节点</a></li>'
-			+'<li>---</li>'
-			+'<li class="menu_add"><a href="#add"><span class="ui-icon ui-icon-plusthick"></span>添加段</a></li>'
-			+'<li class="menu_delete"><a href="#delete"><span class="ui-icon ui-icon-closethick"></span>删除段</a></li>'
-			+'<li>---</li>'
-			+'<li class="menu_import"><a href="#import"><span class="ui-icon ui-icon-pencil"></span>NIT表导入</a></li>'			
-			+'<li class="menu_export"><a href="#export"><span class="ui-icon ui-icon-closethick"></span>NIT表导出</a></li>'			
-			
-		+'</ul>'
-	);
-	
-	//表结构树
-	$("#out_tree").fancytree({
-		extensions: ["menu"],
-		checkbox: true,
-		selectMode: 2,
-		minExpandLevel:3,
-		source: treeData,
-		menu: {
-			selector: "#table_menu",
-			position: {my: "center"},
-			create: function(event, data){
-			    $.ui.fancytree.debug("Menu create ", data.$menu);
-			},
-			beforeOpen: function(event, data){
-			    $.ui.fancytree.debug("Menu beforeOpen ", data.$menu, data.node);				
-			},
-			open: function(event, data){
-			  $.ui.fancytree.debug("Menu open ", data.$menu, data.node);
-			},
-			focus: function(event, data){
-			  $.ui.fancytree.debug("Menu focus ", data.menuId, data.node);
-			},
-			select: function(event, data){				
-				switch(data.menuId){
-					case '#expandall' :{
-						var nodes = data.node.children;
-						data.node.setExpanded(true);
-						$.each(nodes, function(index,item){
-							item.setExpanded(true);
-							//item.render();
-						});
-						break;
-					} case '#collasp': {
-						data.node.setExpanded(false);
-						break;
-					} case '#add': {
-						dialog_NIT.dialog( "open" );
-						break;
-					} case '#delete': {
-						//dialog.dialog( "open" );
-						break;
-					} case '#import': {
-						
-						break;
-					} case '#export': {
-						
-						break;
-					} default: {
-						alert("Menu select " + data.menuId + ", " + data.node);
-						break;
-					}			  
-				}
-			},
-			close: function(event, data){
-			  $.ui.fancytree.debug("Menu close ", data.$menu, data.node);
-			}
-		},
-		select: function(event, data) {
-			// Display list of selected nodes
-			var selNodes = data.tree.getSelectedNodes();
-			// convert to title/key array
-			var selKeys = $.map(selNodes, function(node){
-				 return "[" + node.key + "]: '" + node.title + "'";
-			  });
-			//$("#echoSelection2").text(selKeys.join(", "));
-		},
-		click: function(event, data) {
-			// We should not toggle, if target was "checkbox", because this
-			// would result in double-toggle (i.e. no toggle)
-			if( $.ui.fancytree.getEventTargetType(event) === "title" ){
-			  data.node.toggleSelected();
-			}
-		}
-	});
-	
-	$('#tbl_outtable').dataTable( {
-		"data": dataSet,
-		"order": [[ 0, "asc" ]],
-		"paging":   false,
-		"info":     false,
-		"searching":   false,
-		"scrollCollapse": true,
-		"columns": [
-			{ "title": "NO" },
-			{ "title": "CH" },
-			{ "title": "IN-PID"},
-			{ "title": "OUT-PID"},
-			{ "title": "TYPE" }
-		]
-	}); 
-	
-	//编辑节目右键菜单弹出对话框
-	var dialog_NIT = $( "#dialog-NIT" ).dialog({
-		autoOpen: false,
-		height: 500,
-		width: 600,
-		modal: true,
-		buttons: {
-			"确定": function() {
-			  dialog_NIT.dialog( "close" );
-			},
-			"取消": function() {
-			  dialog_NIT.dialog( "close" );
-			}
-		}
-	});
-}
+var dataSet1 = [
+	['0','2'],
+	['1','3'],
+	['2','22'],
+	['3','24']	
+];
 	
 function devinfo_output(){
 	$('.main-content').empty();
@@ -346,8 +214,58 @@ function devinfo_output(){
 					+'<input type="checkbox" class="sl_nit">    NIT</input>'
 			+'</fieldset>'
 		+'</div>'
+		+'<div id="dialog-pid" title="PID表">'
+			+'<table cellpadding="0" cellspacing="0" border="0" class="cell-border compact hover" id="tbl_pid"></table>'
+		+'</div>'
+		+'<div id="dialog-descriptor" title="描述符">'
+			+'<div class="clearfix">'
+				+'<div class="tbl_descriptor">'
+					+'<table cellpadding="0" cellspacing="0" border="0" class="cell-border compact hover" id="tbl_descriptor"></table>'
+				+'</div>'				
+				+'<div class="desc_content">'
+					+'<h3>User define descrptor</h3>'
+					+'<label>标签</label> &nbsp&nbsp&nbsp&nbsp <input class="desc_tag" value=""></input>&nbsp&nbsp (Hex  eg:4A)'
+					+'<br />'
+					+'<label>长度</label> &nbsp&nbsp&nbsp&nbsp <label class="desc_length"></label>'
+					+'<br />'
+					+'<label style="float:left">字节</label> <textarea class="desc_bytes" row="6"></textarea> <br/><br/>'
+					+'<h5>空格分离每个字节，值为十六进制.例：2D 3C 14</h5>'
+				+'</div>'
+			+'</div>'
+		+'</div>'
 	);
 	
+	//描述符表
+	$('#tbl_descriptor').dataTable( {
+		"data": dataSet1,
+		"order": [[ 0, "asc" ]],
+		"paging":   false,
+		"info":     false,
+		"searching":   false,
+		"scrollCollapse": true,
+		"columns": [
+			{ "title": "标签", "width":"40%" },
+			{ "title": "描述符"}
+		]
+	});
+	
+	//PID表
+	$('#tbl_pid').dataTable( {
+		"data": dataSet,
+		"order": [[ 0, "asc" ]],
+		"paging":   false,
+		"info":     false,
+		"searching":   false,
+		"scrollCollapse": true,
+		"columns": [
+			{ "title": "序号" },
+			{ "title": "通道"},
+			{ "title": "输入PID(Hex)"},
+			{ "title": "输出PID(Hex)" }
+		]
+	}); 
+	
+	//编辑节目对话框表
 	$('#tbl_editprg').dataTable( {
 		"data": dataSet,
 		"order": [[ 0, "asc" ]],
@@ -498,7 +416,7 @@ function devinfo_output(){
 						
 						break;
 					} case '#add': {
-						
+						dialog_desc.dialog( "open" );
 						break;
 					} case '#prgdeleteall': {
 						
@@ -513,7 +431,7 @@ function devinfo_output(){
 						
 						break;
 					} case '#pidtrans': {
-						
+						dialog_pid.dialog( "open" );
 						break;
 					} default: {
 						alert("Menu select " + data.menuId + ", " + data.node);
@@ -615,9 +533,45 @@ function devinfo_output(){
 			  data.node.toggleSelected();
 			}
 		}
-	});	 
+	});
+
+	//描述符右键菜单弹出对话框
+	var dialog_desc = $( "#dialog-descriptor" ).dialog({
+		autoOpen: false,
+		width: 750,
+		modal: true,
+		buttons: {
+			"确定": function() {
+			  dialog_desc.dialog( "close" );
+			},
+			"取消": function() {
+			  dialog_desc.dialog( "close" );
+			}
+		}
+	});	
 	
-	//编辑节目右键菜单弹出对话框
+	//PID透传右键菜单弹出对话框
+	var dialog_pid = $( "#dialog-pid" ).dialog({
+		autoOpen: false,
+		width: 600,
+		modal: true,
+		buttons: {
+			"添加": function() {
+			  dialog_pid.dialog( "close" );
+			},
+			"删除": function() {
+			  dialog_pid.dialog( "close" );
+			},
+			"确定": function() {
+			  dialog_pid.dialog( "close" );
+			},
+			"取消": function() {
+			  dialog_pid.dialog( "close" );
+			}
+		}
+	});
+	
+	//添加段右键菜单弹出对话框
 	var dialog_NIT = $( "#dialog-NIT" ).dialog({
 		autoOpen: false,
 		height: 500,

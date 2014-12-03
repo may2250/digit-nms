@@ -470,4 +470,37 @@ ul,ol{
 	border: 1px solid #dddddd;	
 	width: 100%;
   }
+  
+  #dialog-descriptor {
+	display:none;
+	padding: 10px;
+	line-height: 1.9;
+  }
+  
+  .tbl_descriptor {
+	border: 1px solid #dddddd;	
+	float:left;
+	margin-left: 10px;
+	width: 48%;
+  }
+  
+  .desc_content {
+	float:left;
+	border: 1px solid #dddddd;	
+	margin-left: 5px;
+	padding: 10px;
+	width: 46%;
+  }
 
+  .desc_content  input{
+	width: 40px;
+  }
+  
+  .desc_content  h5{
+	float: left;
+  }
+  
+  .desc_bytes {
+	float: left;
+	margin-left: 30px;
+  }
