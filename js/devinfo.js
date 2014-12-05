@@ -122,12 +122,12 @@ function devinfo_output(){
 				+'</div>'
 				+'<div id="dialog-NIT" title="NIT段编辑">'			
 					+'<div class="nit_edit">'
-						+'<label>网络ID</label>'
-						+'<input type="text" class="nit_id" value=""></input>&nbsp(十六进制)'
+						+'<label>网络ID &nbsp</label>'
+						+'<input type="text" class="nit_id" value=""></input>&nbsp&nbsp(十六进制)<br/>'
 						+'<label>网络名称</label>'
 						+'<input type="text" class="nit_name" value="段1"></input>'
 						+'<br/>'
-						+'<textarea rows="5">'
+						+'<textarea rows="8" style="width:350px;margin-left:30px">'
 						+'</textarea>'
 					+'</div>'
 				+'</div>'
@@ -574,8 +574,8 @@ function devinfo_output(){
 	//添加段右键菜单弹出对话框
 	var dialog_NIT = $( "#dialog-NIT" ).dialog({
 		autoOpen: false,
-		height: 500,
-		width: 600,
+		height: 400,
+		width: 450,
 		modal: true,
 		buttons: {
 			"确定": function() {
